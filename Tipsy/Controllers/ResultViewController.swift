@@ -13,23 +13,22 @@ class ResultViewController: UIViewController {
     @IBOutlet weak var lblAmount: UILabel!
     @IBOutlet weak var lblSplitInfo: UILabel!
     
+    var splitAmount: Float?
+    var splitInfo: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        //setting text that we receive from previous screen
+        lblAmount.text = String(format: "%.2f", splitAmount ?? 0.0)
+        lblSplitInfo.text = splitInfo ?? "per person should pay"
     }
     
     @IBAction func btnRecalculateTouchUp(_ sender: UIButton) {
+        //to go back to previous screen
+        self.dismiss(animated: true)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

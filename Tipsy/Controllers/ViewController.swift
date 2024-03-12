@@ -9,6 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var splitAmount: Float = 0.0
+    var splitInfo = ""
 
     @IBOutlet weak var txtBillAmount: UITextField!
     
@@ -24,7 +27,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func btnTipChangeTouchUp(_ sender: UIButton) {
-        
+        // will hide the keyboard from screen when we touch any of the tip button
         txtBillAmount.endEditing(true)
         
         if sender == btnZeroPct{
@@ -47,17 +50,34 @@ class ViewController: UIViewController {
     }
     
     @IBAction func btnCalculateTouchUp(_ sender: UIButton) {
-        let tipPercent = btnZeroPct.isSelected ? 0.0 : btnTenPct.isSelected ? 0.1 : 0.2
+        let tipPercent = Float(btnZeroPct.isSelected ? 0.0 : btnTenPct.isSelected ? 0.1 : 0.2)
         let splitNumber = Float(lblSplitNumber.text ?? "2")
-        let amount = Float(txtBillAmount.text ?? "0.0")
+        let amount = Float(txtBillAmount.text ?? "0.0") ?? Float(0.0)
         
         print(tipPercent)
-        print("Split number: \(splitNumber)")
+        print("Split number: \(splitNumber!)")
         print("Amount to split: \(amount)")
         
-        var total =
+        let total = (amount + (amount * tipPercent)) / Float(splitNumber!)
         
-        print("Per person amount: ")
+        print("Per person amount: \(total)")
+        
+        splitAmount = total
+        splitInfo = "Split between \(Int(splitNumber!)) people, with \(Int(tipPercent*100))% tip"
+        
+        //launching result screen
+        performSegue(withIdentifier: "goToResultView", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "goToResultView"){
+            
+            //sending additional info to another view
+            let resultViewController = segue.destination as! ResultViewController
+            resultViewController.splitAmount = splitAmount
+            resultViewController.splitInfo = splitInfo
+            
+        }
     }
     
 }
